@@ -22,6 +22,36 @@ private:
 	static std::once_flag initInstanceFlag;
 };
 
+std::unique_ptr<MySingleton> MySingleton::instance;
+std::once_flag MySingleton::initInstanceFlag;
+
+MySingleton::MySingleton()
+{
+    cout << "MySingleton" <<endl;
+}
+
+MySingleton::~MySingleton()
+{
+    cout << "~MySingleton" <<endl;
+}
+
+void MySingleton::test(const std::string& msg)
+{
+    cout << msg << endl;
+}
+
+std::unique_ptr<MySingleton>& MySingleton::getInstance()
+{
+    std::call_once(initInstanceFlag, &MySingleton::initSingleton);
+    return instance;
+}
+
+void MySingleton::initSingleton()
+{
+    instance.reset(new MySingleton);
+}
+
+
 void test1()
 {
      MySingleton::getInstance()->test("test1");
