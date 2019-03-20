@@ -1,8 +1,10 @@
-#ifndef MYSINGLETON_H
-#define MYSINGLETON_H
+#include <iostream>
+#include <thread>
 #include <mutex>
 #include <memory>
 #include <string>
+
+using namespace std;
 class MySingleton
 {
 public:
@@ -20,4 +22,22 @@ private:
 	static std::once_flag initInstanceFlag;
 };
 
-#endif // MYSINGLETON_H
+void test1()
+{
+     MySingleton::getInstance()->test("test1");
+}
+
+void test2()
+{
+    MySingleton::getInstance()->test("test2");
+}
+
+int main()
+{
+    thread t1(test1);
+    thread t2(test2);
+
+    t1.join();
+    t2.join();
+    return 0;
+}
